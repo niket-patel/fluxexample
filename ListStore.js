@@ -5,7 +5,8 @@ import _ from 'lodash';
 let ListStore = _.extend({}, EventEmitter.prototype, {
 
   // Mock default data
-  items: [  
+  items: [  {"id":10,"name":"niket"},
+			{"id":11,"name":"patel"}
   ],
 
   // Get all items
@@ -17,17 +18,30 @@ let ListStore = _.extend({}, EventEmitter.prototype, {
   addItem: function(new_item){
     this.items.push(new_item);
   },
+  // Edit item
+  updateItem: function(edit_item){
+    //this.items.push(new_item);
+    console.log('editItem::store:id:'+edit_item.id);
+    console.log('editItem::store:name:'+edit_item.name);
+    var index = this.find(edit_item.id);
+    console.log('editItem::store:index:'+index);
+    this.items[index]=edit_item;
+  },
 
+  find: function (id) {
+    var id = parseInt(id);
+    var found = undefined;
+    this.items.some(function (item, i) {
+      if (item.id === id) found = i;
+    });
+    return found;
+  },
   // Remove item
   removeItem: function(item_id){
-    
-    let items = this.items;
-    
-    _.remove(items,(item) => {
-      return item_id == item.id;
-    });
-    
-    this.items = items;
+ 
+    var index = this.find(item_id);
+    console.log('editItem::store:index:'+index);
+    return this.items.splice(index,1);
 
   },
 

@@ -4,6 +4,9 @@ import ReactDOM from 'react-dom';
 import AppDispatcher from './AppDispatcher';
 
 class NewItemForm extends React.Component {
+    constructor(props){
+      super(props);
+    }
 
   createItem(e){
     
@@ -18,10 +21,7 @@ class NewItemForm extends React.Component {
     
     // this removes the value from the input
     ReactDOM.findDOMNode(this.refs.item_title).value = '';
-    
-    // This is where the magic happens, 
-    // no need to shoot this action all the way to the root of your application to edit state.
-    // AppDispatcher does this for you.
+
     AppDispatcher.dispatch({
       action: 'add-item',
       new_item: {
