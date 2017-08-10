@@ -3,6 +3,7 @@ import React from 'react';
 import ListStore from './ListStore.js';
 import AppDispatcher from './AppDispatcher.js';
 import NewItemForm from './NewItemForm.jsx';
+import AppAction from './AppAction.jsx';
 
 
 class AppRoot extends React.Component {
@@ -11,7 +12,8 @@ class AppRoot extends React.Component {
     super();
     this.state = {
       editMode: false,
-      editId: null
+      editId: null,
+      items : ListStore.getItems()
     }
     this.editItem = this.editItem.bind(this);
     this.renderForm = this.renderForm.bind(this);    
@@ -35,26 +37,13 @@ class AppRoot extends React.Component {
   }
   removeItem(e) {
     let id = e.target.dataset.id;
-
-    AppDispatcher.dispatch({
-      action: 'remove-item',
-      id: id
-    });
-
+    AppAction.removeItem(id);
   }
   updateItem(event) {
-    event.preventDefault();
-    let item_id = event.target.dataset.id;
-    let item_title = event.target.dataset.title;
+    event.preventDefault();    
     this.setState({ editMode: false, editId:null });
-
-    AppDispatcher.dispatch({
-      action: 'update-item',
-      edit_item: {
-        id: item_id,
-        name: item_title
-      }
-    });
+    AppAction.updateItem(event.target.dataset);
+    
   }
   updateTextValue(event) {
     const target = event.target;
@@ -71,29 +60,29 @@ class AppRoot extends React.Component {
 
 
   }
-  renderEditItem(listItem) {
+  renderEditItem(item) {
     let _this = this;
-    return <li key={listItem.id}>
-      <input type="text" name={listItem.name} value={listItem.name} onChange={this.updateTextValue} />
-      <button onClick={_this.removeItem} data-id={listItem.id}>Delete</button>
-      <button onClick={_this.updateItem} data-id={listItem.id} data-title={listItem.name} >Update</button>
+    return <li key={item.id}>
+      <input type="text" name={item.name} value={item.name} onChange={this.updateTextValue} />
+      <button onClick={_this.removeItem} data-id={item.id}>Delete</button>
+      <button onClick={_this.updateItem} data-id={item.id} data-title={item.name} >Update</button>
     </li>;
   }
-  renderItem(listItem) {
+  renderItem(item) {
     let _this = this;
-    return <li key={listItem.id}>
-      {listItem.name} <button onClick={_this.removeItem} data-id={listItem.id}>Delete</button>
-      <button onClick={_this.editItem} data-id={listItem.id} data-title={listItem.name} >Edit</button>
+    return <li key={item.id}>
+      {item.name} <button onClick={_this.removeItem} data-id={item.id}>Delete</button>
+      <button onClick={_this.editItem} data-id={item.id} data-title={item.name} >Edit</button>
     </li>;
   }
   renderForm() {
 
-    let items = ListStore.getItems();
-    let itemHtml = items.map((listItem) => {
-      if (listItem.id == this.state.editId) {
-        return this.renderEditItem(listItem);
+    //let items = ListStore.getItems();
+    let itemHtml = this.state.items.map((item) => {
+      if (item.id == this.state.editId) {
+        return this.renderEditItem(item);
       } else {
-        return this.renderItem(listItem);
+        return this.renderItem(item);
       }
 
     });
