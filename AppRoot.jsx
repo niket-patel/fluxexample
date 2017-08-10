@@ -13,6 +13,7 @@ class AppRoot extends React.Component {
     this.state = {
       editMode: false,
       editId: null,
+      editName:null,
       items : ListStore.getItems()
     }
     this.editItem = this.editItem.bind(this);
@@ -42,6 +43,7 @@ class AppRoot extends React.Component {
   updateItem(event) {
     event.preventDefault();    
     this.setState({ editMode: false, editId:null });
+    console.log('updateItem:id:' + event.target.dataset.id + ':value' + event.target.dataset.value);    
     AppAction.updateItem(event.target.dataset);
     
   }
@@ -49,6 +51,7 @@ class AppRoot extends React.Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
+    this.setState({editName: value });
     console.log('updateTextValue:name:' + name + ':value' + value);
   }
   editItem(e) {
@@ -56,16 +59,17 @@ class AppRoot extends React.Component {
     let item_id = e.target.dataset.id;
     let item_title = e.target.dataset.title;
     console.log('editItem:item_id:' + item_id + ':item_title' + item_title);
-    this.setState({ editMode: true, editId: item_id });
+    this.setState({ editMode: true, editId: item_id, editName: item_title });
+
 
 
   }
   renderEditItem(item) {
     let _this = this;
     return <li key={item.id}>
-      <input type="text" name={item.name} value={item.name} onChange={this.updateTextValue} />
+      <input type="text" name={item.name} value={this.state.editName} onChange={this.updateTextValue} />
       <button onClick={_this.removeItem} data-id={item.id}>Delete</button>
-      <button onClick={_this.updateItem} data-id={item.id} data-title={item.name} >Update</button>
+      <button onClick={_this.updateItem} data-id={item.id} data-title={this.state.editName} >Update</button>
     </li>;
   }
   renderItem(item) {
