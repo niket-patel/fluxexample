@@ -21,7 +21,9 @@ class AppActionClass extends React.Component  {
       action: 'update-item',
       edit_item: {
         id: dataset.id,
-        name: dataset.title
+        name: dataset.title,
+        phone: dataset.phone
+
       }
     });
   }

@@ -5,8 +5,8 @@ import _ from 'lodash';
 let ListStore = _.extend({}, EventEmitter.prototype, {
 
   // Mock default data
-  items: [  {"id":10,"name":"niket"},
-			{"id":11,"name":"patel"}
+  items: [  {"id":10,"name":"niket",phone:123456},
+			{"id":11,"name":"patel",phone:56789}
   ],
 
   // Get all items
@@ -41,8 +41,7 @@ let ListStore = _.extend({}, EventEmitter.prototype, {
  
     var index = this.find(item_id);
     console.log('editItem::store:index:'+index);
-    return this.items.splice(index,1);
-
+   return this.items.splice(index,1);
   },
 
   // Emit Change event
